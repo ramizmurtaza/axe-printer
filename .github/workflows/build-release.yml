@@ -1,0 +1,38 @@
+name: Build & Release (Windows)
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "18"
+
+      - name: Install deps
+        run: npm ci
+
+      - name: Build EXE
+        run: npm run build
+
+      - name: Archive artifact
+        run: |
+          mkdir upload
+          copy dist\\PrintDaemon.exe upload\\PrintDaemon.exe
+          copy LICENSE upload\\LICENSE
+          powershell Compress-Archive -Path upload\\* -DestinationPath PrintDaemon-windows.zip
+
+      - name: Upload Release Asset
+        uses: softprops/action-gh-release@v2
+        with:
+          files: PrintDaemon-windows.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
