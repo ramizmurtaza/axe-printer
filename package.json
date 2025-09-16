@@ -1,5 +1,5 @@
 {
-    "name": "printer-daemon",
+    "name": "axe-printer",
     "version": "1.0.0",
     "description": "Silent PDF print daemon for POS/Invoices on Windows (SumatraPDF + Express + pkg).",
     "author": "Ramiz Murtaza",
